@@ -1,0 +1,68 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import tags from "@/data/posts/tags.json";
+import { getCollection } from "astro:content";
+import { type GetStaticPathsOptions } from "astro";
+import PageHeading from "@/components/PageHeading.astro";
+import PostCard from "@/components/PostCard.astro";
+import Pagination from "@/components/Pagination.astro";
+
+export const getStaticPaths = async ({ paginate }: GetStaticPathsOptions) => {
+  const posts = await getCollection("posts");
+
+  return tags.flatMap((tag) => {
+    const filteredPosts = posts.filter((post) =>
+      post.data.tags.includes(tag.tagName)
+    );
+    const sortedPosts = filteredPosts.sort(
+      (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
+    );
+
+    return paginate(sortedPosts, {
+      params: { tag: tag.tagSlug },
+      pageSize: 3,
+    });
+  });
+};
+
+const { page } = Astro.props;
+const params = Astro.params;
+const tagName = tags.find((t) => t.tagSlug === params.tag)?.tagName;
+---
+
+<Layout title={tagName}>
+  <main class="main-content">
+    <PageHeading en={params.tag.toUpperCase()} ja={tagName} />
+    {
+      page.data.length !== 0 ? (
+        <ul class="list">
+          {page.data.map((post) => (
+            <li class="item">
+              <PostCard
+                slug={`/posts/${post.slug}`}
+                cover={post.data.cover}
+                title={post.data.title}
+                description={post.data.description}
+                pubDate={post.data.pubDate}
+                lastModified={post.data.lastModified}
+              />
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p class="tag-not-found">
+          <span class="tag-name">"{tagName}"</span> の投稿はありません
+        </p>
+      )
+    }
+    {
+      page.total > page.data.length ? (
+        <Pagination
+          currentPage={page.currentPage}
+          lastPage={page.lastPage}
+          baseUrl={`/tags/${params.tag}`}
+        />
+      ) : null
+    }
+  </main>
+</Layout>

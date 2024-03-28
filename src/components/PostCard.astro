@@ -1,0 +1,54 @@
+---
+import { Image } from "astro:assets";
+import { dateFormatter } from "@/utils/dateFormatter";
+
+const {
+  slug,
+  cover,
+  titleElement = "h2",
+  title,
+  description,
+  pubDate,
+  lastModified = null,
+} = Astro.props;
+
+const Heading = titleElement;
+---
+
+<article class="post-card">
+  <a class="post-card__link" href={slug}>
+    <div class="post-card__image-wrapper">
+      <Image src={cover} alt={title} />
+    </div>
+    <div class="post-card__body">
+      <Heading class="post-card__title">{title}</Heading>
+      <div class="post-card__meta">
+        {
+          lastModified &&
+            (() => {
+              const { dateTimeAttribute, dateTimeValue } =
+                dateFormatter(lastModified);
+
+              return (
+                <time class="post-card__modified" datetime={dateTimeAttribute}>
+                  最終更新日:{dateTimeValue}
+                </time>
+              );
+            })
+        }
+        {
+          () => {
+            const { dateTimeAttribute, dateTimeValue } = dateFormatter(pubDate);
+
+            return (
+              <time class="post-card__published" datetime={dateTimeAttribute}>
+                公開日:{dateTimeValue}
+              </time>
+            );
+          }
+        }
+      </div>
+      <p class="post-card__description">{description}</p>
+    </div>
+  </a>
+</article>

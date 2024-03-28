@@ -1,0 +1,10 @@
+---
+const { en, ja, headingElement = "h1" } = Astro.props;
+
+const Heading = headingElement;
+---
+
+<Heading class="page-heading">
+  <span class="page-heading__en">{en}</span>
+  <span class="page-heading__ja">{ja}</span>
+</Heading>

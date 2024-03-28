@@ -1,0 +1,29 @@
+---
+import navItems from "@/data/nav/navItems.json";
+
+const { currentPath } = Astro.props;
+---
+
+<header class="header">
+  <div class="header__inner">
+    <nav class="header-nav">
+      <ul class="header-nav__list">
+        {
+          navItems.map((item) => (
+            <li class="header-nav__item">
+              {item.url === currentPath ? (
+                <span class="header-nav__link header-nav__link--current">
+                  {item.title}
+                </span>
+              ) : (
+                <a class="header-nav__link" href={item.url}>
+                  {item.title}
+                </a>
+              )}
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</header>

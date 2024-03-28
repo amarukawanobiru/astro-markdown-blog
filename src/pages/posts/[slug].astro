@@ -1,0 +1,105 @@
+---
+import "@/styles/post.scss";
+import Layout from "@/layouts/Layout.astro";
+import { Image } from "astro:assets";
+import { getCollection } from "astro:content";
+import { dateFormatter } from "@/utils/dateFormatter";
+import { getTagData } from "@/utils/getTagData";
+import TagLabel from "@/components/TagLabel.astro";
+import tags from "@/data/posts/tags.json";
+
+export const getStaticPaths = async () => {
+  const posts = await getCollection("posts");
+  const sortedPosts = posts.sort(
+    (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
+  );
+  const numberOfPosts = sortedPosts.length;
+
+  return sortedPosts.map((post, i) => ({
+    params: { slug: post.slug },
+    props: {
+      post,
+      prevPost: i + 1 === numberOfPosts ? null : sortedPosts[i + 1],
+      nextPost: i - 1 === numberOfPosts ? null : sortedPosts[i - 1],
+    },
+  }));
+};
+
+const { post, prevPost, nextPost } = Astro.props;
+const { Content } = await post.render();
+---
+
+<Layout title={post.data.title} description={post.data.description}>
+  <div class="post">
+    <h1 class="post__title">{post.data.title}</h1>
+    <div class="post__meta">
+      <div class="post__published">
+        公開日:
+        {
+          () => {
+            const { dateTimeAttribute, dateTimeValue } = dateFormatter(
+              post.data.pubDate
+            );
+            return (
+              <time class="post__date" datetime={dateTimeAttribute}>
+                {dateTimeValue}
+              </time>
+            );
+          }
+        }
+      </div>
+      {
+        post.data.lastModified && (
+          <div class="post__modified">
+            最終更新日:
+            {() => {
+              const { dateTimeAttribute, dateTimeValue } = dateFormatter(
+                post.data.lastModified
+              );
+              return (
+                <time class="post__date" datetime={dateTimeAttribute}>
+                  {dateTimeValue}
+                </time>
+              );
+            }}
+          </div>
+        )
+      }
+    </div>
+    <div class="post__tags">
+      <ul class="post__tags-list">
+        {
+          getTagData(post.data.tags, tags).map((tag) => (
+            <li class="post__tags-item">
+              <TagLabel title={tag.tagName} slug={`/tags/${tag.tagSlug}`} />
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+    <Image class="post__cover" src={post.data.cover} alt={post.data.title} />
+    <div class="post__content">
+      <Content />
+    </div>
+    <div class="post__links">
+      {
+        nextPost ? (
+          <a class="post__link post__link--next" href={nextPost.slug}>
+            次の記事へ
+          </a>
+        ) : (
+          <span class="post__link">次の記事はありません</span>
+        )
+      }
+      {
+        prevPost ? (
+          <a class="post__link post__link--prev" href={prevPost.slug}>
+            前の記事へ
+          </a>
+        ) : (
+          <span class="post__link">前の記事はありません</span>
+        )
+      }
+    </div>
+  </div>
+</Layout>

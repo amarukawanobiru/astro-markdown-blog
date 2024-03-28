@@ -1,0 +1,55 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { getCollection } from "astro:content";
+import PostCard from "@/components/PostCard.astro";
+import tags from "@/data/posts/tags.json";
+
+export const getStaticPaths = async () => {
+  const posts = await getCollection("posts");
+
+  return tags.map((tag) => {
+    const filteredPosts = posts.filter((post) =>
+      post.data.tags.includes(tag.tagName)
+    );
+
+    return {
+      params: { tag: tag.tagSlug },
+      props: { posts: filteredPosts },
+    };
+  });
+};
+
+const { tag } = Astro.params;
+const { posts } = Astro.props;
+const sortedPosts = posts.sort(
+  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
+);
+const tagName = tags.find((t) => t.tagSlug === tag)?.tagName;
+---
+
+<Layout title={tagName}>
+  <main class="main-content">
+    {
+      sortedPosts.length !== 0 ? (
+        <ul>
+          {sortedPosts.map((post) => (
+            <li class="posts__item">
+              <PostCard
+                slug={`/posts/${post.slug}`}
+                cover={post.data.cover}
+                title={post.data.title}
+                description={post.data.description}
+                pubDate={post.data.pubDate}
+                lastModified={post.data.lastModified}
+              />
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p class="tag-not-found">
+          <span class="tag-name">"{tagName}"</span> の投稿はありません
+        </p>
+      )
+    }
+  </main>
+</Layout>

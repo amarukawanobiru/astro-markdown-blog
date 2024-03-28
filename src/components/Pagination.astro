@@ -1,0 +1,30 @@
+---
+const { currentPage, lastPage, baseUrl } = Astro.props;
+const pageNumbers = Array.from({ length: lastPage }, (_, i) => i + 1);
+---
+
+<div class="pagination">
+  {
+    pageNumbers.map((num) =>
+      num === 1 ? (
+        currentPage === num ? (
+          <span class="pagination-number is-current">
+            <span>{num}</span>
+          </span>
+        ) : (
+          <a class="pagination-number" href={baseUrl}>
+            <span>{num}</span>
+          </a>
+        )
+      ) : currentPage === num ? (
+        <span class="pagination-number is-current">
+          <span>{num}</span>
+        </span>
+      ) : (
+        <a class="pagination-number" href={`${baseUrl}/${num}`}>
+          <span>{num}</span>
+        </a>
+      )
+    )
+  }
+</div>

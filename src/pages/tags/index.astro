@@ -1,0 +1,21 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import PageHeading from "@/components/PageHeading.astro";
+import TagLabel from "@/components/TagLabel.astro";
+import tags from "@/data/posts/tags.json";
+---
+
+<Layout title="タグ">
+  <main class="main-content">
+    <PageHeading en="TAGS" ja="タグ" />
+    <ul class="tags__list">
+      {
+        tags.map((tag) => (
+          <li class="tags__item">
+            <TagLabel title={tag.tagName} slug={`/tags/${tag.tagSlug}`} />
+          </li>
+        ))
+      }
+    </ul>
+  </main>
+</Layout>

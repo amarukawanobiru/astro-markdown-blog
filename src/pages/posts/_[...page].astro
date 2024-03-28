@@ -1,0 +1,86 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { getCollection } from "astro:content";
+import { type GetStaticPaths } from "astro";
+import { type Page } from "@/utils/types";
+import PostCard from "@/components/PostCard.astro";
+
+export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
+  const posts = await getCollection("posts");
+  const filteredPosts = posts.filter((post) => post.data.draft);
+  const sortedPosts = filteredPosts.sort(
+    (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
+  );
+
+  return paginate(sortedPosts, { pageSize: 3 });
+};
+
+interface Props {
+  page: Page;
+}
+
+const { page } = Astro.props;
+---
+
+<Layout title="ブログ">
+  <div class="posts">
+    <h1 class="posts__title">ブログ</h1>
+    {Math.ceil(page.total / page.size)}
+    <p>
+      <!-- 最後のページが正しく表示されていない -->
+      {page.size * page.currentPage - page.size + 1}件目から{
+        page.size * page.currentPage
+      }件目まで<br />
+      最後のページでは投稿件数を超えているので修正が必要
+    </p>
+    <ul class="posts__list">
+      {
+        page.data.map((post) => (
+          <li class="posts__item">
+            <PostCard
+              slug={`/posts/${post.slug}`}
+              cover={post.data.cover}
+              title={post.data.title}
+              description={post.data.description}
+              pubDate={post.data.pubDate}
+              lastModified={post.data.lastModified}
+            />
+          </li>
+        ))
+      }
+    </ul>
+    <div class="posts__pagination">
+      <p>
+        ページネーション: {page.total > page.data.length ? "オン" : "オフ"}
+      </p>
+      <!-- {
+        page.url.prev ? (
+          <a class="posts__pagination-prev" href={page.url.prev}>
+            前へ
+          </a>
+        ) : null
+      } -->
+      現在のページ{page.currentPage} / 最後のページ{page.lastPage}
+      {
+        Array.from({ length: page.lastPage }).map((_, i) =>
+          i === 0 ? (
+            <a class="posts__pagination-number" href="/posts">
+              <span>{i + 1}</span>
+            </a>
+          ) : (
+            <a class="posts__pagination-number" href={`/posts/${i + 1}`}>
+              <span>{i + 1}</span>
+            </a>
+          )
+        )
+      }
+      <!-- {
+        page.url.next ? (
+          <a class="posts__pagination-prev" href={page.url.next}>
+            次へ
+          </a>
+        ) : null
+      } -->
+    </div>
+  </div>
+</Layout>

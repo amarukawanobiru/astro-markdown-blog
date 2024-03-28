@@ -1,0 +1,50 @@
+[
+  {
+    "tagName": "旅行",
+    "tagSlug": "travel"
+  },
+  {
+    "tagName": "フード・料理",
+    "tagSlug": "food-cooking"
+  },
+  {
+    "tagName": "テクノロジー",
+    "tagSlug": "technology"
+  },
+  {
+    "tagName": "環境",
+    "tagSlug": "environment"
+  },
+  {
+    "tagName": "ファッション",
+    "tagSlug": "fashion"
+  },
+  {
+    "tagName": "健康・フィットネス",
+    "tagSlug": "health-fitness"
+  },
+  {
+    "tagName": "趣味・趣向",
+    "tagSlug": "hobbies-interests"
+  },
+  {
+    "tagName": "ペット",
+    "tagSlug": "pets"
+  },
+  {
+    "tagName": "芸術・文化",
+    "tagSlug": "art-culture"
+  },
+  {
+    "tagName": "映画・テレビ",
+    "tagSlug": "movies-tv"
+  },
+  {
+    "tagName": "音楽",
+    "tagSlug": "music"
+  },
+  {
+    "tagName": "スポーツ",
+    "tagSlug": "sports"
+  }
+]
