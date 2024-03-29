@@ -30,7 +30,7 @@ const { Content } = await post.render();
 ---
 
 <Layout title={post.data.title} description={post.data.description}>
-  <div class="post">
+  <main class="post">
     <h1 class="post__title">{post.data.title}</h1>
     <div class="post__meta">
       <div class="post__published">
@@ -101,5 +101,5 @@ const { Content } = await post.render();
         )
       }
     </div>
-  </div>
+  </main>
 </Layout>

@@ -1,0 +1,10 @@
+---
+const { number } = Astro.props;
+---
+
+<span class="footnote">
+  <sup class="footnote__number">{number}</sup>
+  <span class="footnote__caption">
+    <slot />
+  </span>
+</span>

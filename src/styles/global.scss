@@ -86,7 +86,7 @@ commons
   align-items: center;
 
   @include mq($bp-m) {
-    padding: 20px 20px 60px;
+    padding: 8px 8px 40px;
     flex-direction: column;
   }
 }
@@ -166,6 +166,69 @@ a.pagination-number {
   @include hover {
     text-decoration: underline;
     opacity: 0.6;
+  }
+}
+
+// footnote
+.footnote {
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+
+  @include hover {
+    .footnote__number {
+      color: $color-red;
+    }
+
+    .footnote__caption {
+      visibility: visible;
+      opacity: 1;
+    }
+  }
+}
+
+.footnote__number {
+  color: $color-blue;
+  text-decoration: underline;
+}
+
+.footnote__caption {
+  width: max-content;
+  max-width: 200px;
+  padding: 0.5em 1em;
+  font-size: 1.2rem;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  z-index: 5;
+  transform: translateX(-50%);
+  border: 1px solid $color-text;
+  border-radius: 8px;
+  box-shadow: 2px 2px 0px 0px $color-text;
+  background-color: $color-white;
+  transition-property: visibility, opacity;
+  transition-duration: $duration;
+  transition-timing-function: $easing;
+  visibility: hidden;
+  opacity: 0;
+
+  &.js-left,
+  &.js-right {
+    transform: translateX(0);
+  }
+
+  &.js-left {
+    left: 0;
+  }
+
+  &.js-right {
+    left: auto;
+    right: 0;
+  }
+
+  &.js-show {
+    visibility: visible;
+    opacity: 1;
   }
 }
 
