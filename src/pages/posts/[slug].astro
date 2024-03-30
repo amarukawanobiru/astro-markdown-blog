@@ -84,7 +84,10 @@ const { Content } = await post.render();
     <div class="post__links">
       {
         nextPost ? (
-          <a class="post__link post__link--next" href={nextPost.slug}>
+          <a
+            class="post__link post__link--next"
+            href={`/posts/${nextPost.slug}`}
+          >
             次の記事へ
           </a>
         ) : (
@@ -93,7 +96,10 @@ const { Content } = await post.render();
       }
       {
         prevPost ? (
-          <a class="post__link post__link--prev" href={prevPost.slug}>
+          <a
+            class="post__link post__link--prev"
+            href={`/posts/${prevPost.slug}`}
+          >
             前の記事へ
           </a>
         ) : (
