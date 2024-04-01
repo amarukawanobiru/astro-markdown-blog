@@ -333,7 +333,8 @@ main-visual
   position: absolute;
   inset: 0;
   z-index: 5;
-  backdrop-filter: blur(0px);
+  backdrop-filter: blur(0);
+  -webkit-backdrop-filter: blur(0);
 }
 
 /* ==============================
