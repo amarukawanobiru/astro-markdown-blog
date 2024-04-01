@@ -28,12 +28,13 @@ const { title, description } = Astro.props;
       href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Noto+Sans+JP:wght@100..900&display=swap"
       rel="stylesheet"
     />
-    <!-- <ViewTransitions /> -->
   </head>
   <body>
     <Header currentPath={currentPath} />
     <slot />
     <Footer />
-    <script src="@/scripts/main.js"></script>
+    <script src="@/scripts/footnote.js"></script>
+    <script src="@/scripts/dragAndDrop.js"></script>
+    <!-- <ViewTransitions /> -->
   </body>
 </html>

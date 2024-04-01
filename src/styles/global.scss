@@ -172,6 +172,7 @@ a.pagination-number {
 // footnote
 .footnote {
   display: inline-block;
+  padding: 0 0.5em;
   position: relative;
   cursor: pointer;
 
@@ -297,6 +298,42 @@ a.header-nav__link {
 
 span.header-nav__link {
   opacity: 0.6;
+}
+
+/* ==============================
+main-visual
+============================== */
+.main-visual {
+  width: min(100%, 1104px);
+  padding: 100px 0;
+  margin-left: auto;
+  margin-right: auto;
+
+  @include mq($bp-m) {
+    padding: 0 0 100px;
+  }
+}
+
+.main-visual__inner {
+  aspect-ratio: 16 / 9;
+  background-image: url("../assets/images/main-visual.jpg");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  position: relative;
+
+  @include mq($bp-m) {
+    aspect-ratio: 4 / 5;
+  }
+}
+
+.main-visual__mask {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  backdrop-filter: blur(0px);
 }
 
 /* ==============================

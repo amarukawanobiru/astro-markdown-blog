@@ -3,8 +3,6 @@ const $footnotes = document.querySelectorAll(".footnote");
 if ($footnotes.length > 0) {
   const $footnoteNumbers = document.querySelectorAll(".footnote__number");
   const $footnoteCaptions = document.querySelectorAll(".footnote__caption");
-
-  // TODO: 読み込んだときに位置を確認して実行する
   const adjustFootnoteCaptions = () => {
     const postLeft = $post.getBoundingClientRect().left;
     const threshold = 140;
