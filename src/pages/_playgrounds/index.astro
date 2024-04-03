@@ -1,0 +1,133 @@
+---
+import Layout from "@/layouts/Layout.astro";
+---
+
+<Layout title="ラボ">
+  <main class="main-content">
+    <div class="row">
+      <input type="range" value="0" aria-label="何かを調整するスライダー" />
+      <div class="range-display">0</div>
+    </div>
+    <div class="row">
+      <p>
+        初期値を選択させたくない場合は属性にselectedとhidden又はdisabledを指定
+      </p>
+      <select name="" id="" aria-label="何かを選択するセレクトボックス">
+        <option value="" selected disabled
+          >何かを選択するセレクトボックス</option
+        >
+        <option value="apple">りんご</option>
+        <option value="gorilla">ごりら</option>
+        <option value="lamp">らんぷ</option>
+      </select>
+    </div>
+    <div class="row">
+      <div class="range-slider">
+        <div class="range-slider__track">
+          <div class="range-slider__thumb"></div>
+        </div>
+      </div>
+      <div class="range-slider__ratio">0</div>
+    </div>
+  </main>
+</Layout>
+
+<style lang="scss">
+  .row + .row {
+    margin-top: 32px;
+  }
+
+  input,
+  select {
+    appearance: auto;
+  }
+
+  input[type="range"] {
+    appearance: auto;
+    cursor: pointer;
+  }
+
+  select {
+    margin-top: 16px;
+    border: 1px solid #333;
+    cursor: pointer;
+  }
+
+  .range-slider {
+    width: fit-content;
+  }
+
+  .range-slider__track {
+    width: 200px;
+    height: 8px;
+    border: 2px solid red;
+    background-color: white;
+    border-radius: 8px;
+    position: relative;
+  }
+
+  .range-slider__thumb {
+    $thumbSize: 23px;
+    width: $thumbSize;
+    aspect-ratio: 1;
+    border: 2px solid #333;
+    position: absolute;
+    top: 50%;
+    // left: calc(100% - $thumbSize);
+    left: 0;
+    z-index: 5;
+    transform: translateY(-50%);
+    cursor: pointer;
+  }
+
+  .range-slider__ratio {
+    margin-top: 8px;
+  }
+</style>
+
+<script>
+  const $inputRange: any = document.querySelector("input[type='range']");
+  const $range: any = document.querySelector(".range-display");
+
+  $inputRange?.addEventListener("input", () => {
+    $range.textContent = $inputRange.value;
+  });
+
+  const $rangeSlider: any = document.querySelector(".range-slider");
+  const $rangeSliderTrack: any = $rangeSlider.querySelector(
+    ".range-slider__track"
+  );
+  const $rangeSliderThumb: any = $rangeSlider.querySelector(
+    ".range-slider__thumb"
+  );
+  const $rangeSliderRatio: any = document.querySelector(".range-slider__ratio");
+
+  let shiftX: any;
+  const sliderRange =
+    $rangeSliderTrack.clientWidth - $rangeSliderThumb.offsetWidth;
+  const borderSize =
+    ($rangeSliderThumb.offsetWidth - $rangeSliderThumb.clientWidth) / 2;
+
+  function thumbMove(event: any) {
+    $rangeSliderThumb.style.left = `${event.pageX - shiftX}px`;
+
+    const thumbLeft =
+      $rangeSliderThumb.getBoundingClientRect().left -
+      $rangeSliderTrack.getBoundingClientRect().left -
+      borderSize;
+
+    $rangeSliderRatio.textContent = Math.trunc((thumbLeft / sliderRange) * 100);
+  }
+
+  $rangeSliderThumb.addEventListener("mousedown", (event: any) => {
+    event.preventDefault();
+
+    // shiftX = event.clientX - $rangeSliderThumb.getBoundingClientRect().left;
+    shiftX = event.clientX - $rangeSliderThumb.offsetLeft;
+    document.addEventListener("mousemove", thumbMove);
+
+    document.addEventListener("mouseup", () => {
+      document.removeEventListener("mousemove", thumbMove);
+    });
+  });
+</script>

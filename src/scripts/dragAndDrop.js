@@ -1,110 +1,82 @@
-const $indicator = document.querySelector(".indicator");
+const $rangeSlider = document.querySelector(".range-slider");
 
-if ($indicator) {
-  const $status = document.querySelector(".status");
-  const $indicatorPointer = $indicator.querySelector(".indicator__pointer");
+if ($rangeSlider) {
+  const $rangeSliderTrack = $rangeSlider.querySelector(".range-slider__track");
+  const $rangeSliderThumb = $rangeSlider.querySelector(".range-slider__thumb");
+  const $rangeDisplay = document.querySelector(".range-display");
   const $mainVisualMask = document.querySelector(".main-visual__mask");
+  const denominator =
+    $rangeSliderTrack.clientWidth - $rangeSliderThumb.offsetWidth;
 
   let shiftX;
-  // let shiftY;
 
-  function updateBackdropFilter() {
-    const denominator =
-      $indicator.clientWidth - $indicatorPointer.clientWidth - 6;
+  function thumbMove({ pointerPositionX }) {
+    const adjustedX = pointerPositionX - shiftX;
+    let ratio;
 
-    const ratio = Math.trunc(
-      (($indicatorPointer.getBoundingClientRect().left -
-        $indicator.getBoundingClientRect().left -
-        2) /
-        denominator) *
-        100
-    );
+    if (adjustedX >= 0 && adjustedX <= denominator) {
+      $rangeSliderThumb.style.left = `${adjustedX}px`;
+      ratio = Math.trunc((adjustedX / denominator) * 100);
+    } else if (adjustedX < 0) {
+      $rangeSliderThumb.style.left = "0px";
+      ratio = 0;
+    } else {
+      $rangeSliderThumb.style.left = `${denominator}px`;
+      ratio = 100;
+    }
 
+    $rangeSliderTrack.style.backgroundImage = `linear-gradient(90deg, #555 ${adjustedX}px , #fff ${adjustedX}px )`;
     $mainVisualMask.style.backdropFilter = `blur(${Math.trunc(ratio / 5)}px)`;
     $mainVisualMask.style.WebkitBackdropFilter = `blur(${Math.trunc(
       ratio / 5
     )}px)`;
-    $status.textContent = `${ratio}%`;
+    $rangeDisplay.textContent = `${ratio}%`;
   }
 
-  function adjustIndicatorPosition(
-    grabElementLeft,
-    pointerPositionX,
-    deviceType
-  ) {
-    $indicatorPointer.style.left = `${
-      pointerPositionX - $indicator.getBoundingClientRect().left - shiftX
-    }px`;
+  function handleMouseMove(e) {
+    const pointerPositionX = e.clientX;
 
-    if (grabElementLeft - 2 < $indicator.getBoundingClientRect().left) {
-      $indicatorPointer.style.left = "2px";
-      if (deviceType === "touch") {
-        document.removeEventListener("touchmove", handleTouchMove);
-      } else {
-        document.removeEventListener("mousemove", handleMouseMove);
-      }
-    }
-
-    if (
-      grabElementLeft + $indicatorPointer.clientWidth + 4 >
-      $indicator.getBoundingClientRect().left + $indicator.clientWidth
-    ) {
-      $indicatorPointer.style.left = `calc(100% - 4px - ${$indicatorPointer.clientWidth}px)`;
-      if (deviceType === "touch") {
-        document.removeEventListener("touchmove", handleTouchMove);
-      } else {
-        document.removeEventListener("mousemove", handleMouseMove);
-      }
-    }
-
-    updateBackdropFilter();
+    thumbMove({ pointerPositionX });
   }
 
-  function handleMouseMove(event) {
-    const grabElementLeft = $indicatorPointer.getBoundingClientRect().left;
+  function handleTouchMove(e) {
+    const pointerPositionX = e.changedTouches[0].clientX;
 
-    const pointerPositionX = event.pageX;
-    // let pointerPositionY = event.changedTouches[0].pageY ? event.changedTouches[0].pageY : event.pageY;
-
-    adjustIndicatorPosition(grabElementLeft, pointerPositionX, "mouse");
+    thumbMove({ pointerPositionX });
   }
 
-  function handleTouchMove(event) {
-    const grabElementLeft = $indicatorPointer.getBoundingClientRect().left;
+  // ポイディングデバイスがマウスだった場合の処理
+  $rangeSliderThumb.addEventListener("mousedown", (e) => {
+    e.preventDefault();
 
-    let pointerPositionX = event.changedTouches[0].pageX;
-    // let pointerPositionY = event.changedTouches[0].pageY ? event.changedTouches[0].pageY : event.pageY;
+    shiftX =
+      e.clientX -
+      ($rangeSliderThumb.getBoundingClientRect().left -
+        $rangeSliderTrack.getBoundingClientRect().left);
 
-    adjustIndicatorPosition(grabElementLeft, pointerPositionX, "touch");
-  }
-
-  // ポインティングデバイスがマウスだった場合の処理
-  $indicatorPointer.addEventListener("mousedown", (event) => {
-    event.preventDefault();
-    $indicatorPointer.style.cursor = "grabbing";
-
-    shiftX = event.clientX - $indicatorPointer.getBoundingClientRect().left;
-    // shiftY = event.clientY - $indicatorPointer.getBoundingClientRect().top;
+    $rangeDisplay.classList.add("js-active");
 
     document.addEventListener("mousemove", handleMouseMove);
 
     document.addEventListener("mouseup", () => {
-      $indicatorPointer.style.cursor = "grab";
+      $rangeDisplay.classList.remove("js-active");
       document.removeEventListener("mousemove", handleMouseMove);
     });
   });
 
-  // ポインティングデバイスのがタッチだった場合の処理
-  $indicatorPointer.addEventListener("touchstart", (event) => {
-    event.preventDefault();
+  // ポインティングデバイスがタッチだった場合の処理
+  $rangeSliderThumb.addEventListener("touchstart", (e) => {
+    e.preventDefault();
 
     shiftX =
-      event.changedTouches[0].clientX -
-      $indicatorPointer.getBoundingClientRect().left;
+      e.changedTouches[0].clientX -
+      ($rangeSliderThumb.getBoundingClientRect().left -
+        $rangeSliderTrack.getBoundingClientRect().left);
 
     document.addEventListener("touchmove", handleTouchMove);
 
     document.addEventListener("touchend", () => {
+      $rangeDisplay.classList.remove("js-active");
       document.removeEventListener("touchmove", handleTouchMove);
     });
   });

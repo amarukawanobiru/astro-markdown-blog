@@ -5,58 +5,14 @@ import Layout from "@/layouts/Layout.astro";
 <Layout title="ホーム">
   <div class="main-visual">
     <div class="main-visual__inner">
-      <div class="status">0%</div>
-      <div class="indicator">
-        <div class="indicator__line">
-          <div class="indicator__pointer"></div>
+      <div class="range-slider">
+        <div class="range-slider__track">
+          <div class="range-slider__thumb">
+            <div class="range-display">0%</div>
+          </div>
         </div>
       </div>
       <div class="main-visual__mask"></div>
     </div>
   </div>
 </Layout>
-
-<style lang="scss">
-  .indicator {
-    position: absolute;
-    right: 24px;
-    bottom: 16px;
-    z-index: 15;
-    width: 200px;
-    user-select: none;
-  }
-
-  .indicator__line {
-    width: 100%;
-    height: 4px;
-    background-color: white;
-    border-radius: 4px;
-    position: relative;
-  }
-
-  .indicator__pointer {
-    user-select: none;
-    cursor: grab;
-    position: absolute;
-    top: 50%;
-    left: 2px;
-    transform: translateY(-50%);
-    width: 21px;
-    aspect-ratio: 1;
-    border-radius: 50%;
-    border: 1px solid gray;
-    background-color: white;
-  }
-
-  .status {
-    color: white;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    z-index: 15;
-    transform: translate(-50%, -50%);
-    font-size: 4rem;
-    letter-spacing: 0.1em;
-    font-weight: bold;
-  }
-</style>
