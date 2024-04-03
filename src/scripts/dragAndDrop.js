@@ -21,7 +21,7 @@ export const dragAndDrop = () => {
     let shiftX;
 
     function thumbMove({ pointerPositionX }) {
-      const adjustedX = pointerPositionX - shiftX;
+      let adjustedX = pointerPositionX - shiftX;
       let ratio;
 
       if (adjustedX >= 0 && adjustedX <= denominator) {
@@ -29,9 +29,11 @@ export const dragAndDrop = () => {
         ratio = Math.trunc((adjustedX / denominator) * 100);
       } else if (adjustedX < 0) {
         $rangeSliderThumb.style.left = "0px";
+        adjustedX = 0;
         ratio = 0;
       } else {
         $rangeSliderThumb.style.left = `${denominator}px`;
+        adjustedX = denominator;
         ratio = 100;
       }
 
