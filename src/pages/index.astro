@@ -5,6 +5,11 @@ import Layout from "@/layouts/Layout.astro";
 <Layout title="ホーム">
   <div class="main-visual">
     <div class="main-visual__inner">
+      <div class="dev-status">
+        <span class="touch">OFF</span>
+        <span class="handle">OFF</span>
+        <span class="move">OFF</span>
+      </div>
       <div class="range-slider">
         <div class="range-slider__track">
           <div class="range-slider__thumb">
@@ -16,7 +21,3 @@ import Layout from "@/layouts/Layout.astro";
     </div>
   </div>
 </Layout>
-
-<script>
-  import "@/scripts/dragAndDrop.js";
-</script>

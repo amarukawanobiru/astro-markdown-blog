@@ -1,3 +1,5 @@
+// TODO: ウィンドウサイズに関係なくタッチ操作を行えるようにする
+
 const $post = document.querySelector(".post");
 const $footnotes = document.querySelectorAll(".footnote");
 if ($footnotes.length > 0) {
@@ -25,22 +27,20 @@ if ($footnotes.length > 0) {
     });
   };
 
+  [...$footnotes].map((element, index) => {
+    element.addEventListener("touch", (e) => {
+      e.stopPropagation(); // イベントのバブリング（伝播）を防ぐためのメソッド
+      $footnoteCaptions[index].classList.toggle("js-show");
+    });
+  });
+
+  document.addEventListener("touch", () => {
+    [...$footnotes].map((_, index) => {
+      $footnoteCaptions[index].classList.remove("js-show");
+    });
+  });
+
   adjustFootnoteCaptions();
 
   window.addEventListener("resize", adjustFootnoteCaptions);
-
-  if (window.innerWidth <= 768) {
-    [...$footnotes].map((element, index) => {
-      element.addEventListener("click", (e) => {
-        e.stopPropagation(); // イベントのバブリング（伝播）を防ぐためのメソッド
-        $footnoteCaptions[index].classList.toggle("js-show");
-      });
-    });
-
-    document.addEventListener("click", () => {
-      [...$footnotes].map((_, index) => {
-        $footnoteCaptions[index].classList.remove("js-show");
-      });
-    });
-  }
 }

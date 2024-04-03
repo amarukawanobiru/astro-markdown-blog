@@ -8,6 +8,11 @@ if ($rangeSlider) {
   const denominator =
     $rangeSliderTrack.clientWidth - $rangeSliderThumb.offsetWidth;
 
+  const $devStatus = document.querySelector(".dev-status");
+  const $touch = $devStatus.querySelector(".touch");
+  const $handle = $devStatus.querySelector(".handle");
+  const $move = $devStatus.querySelector(".move");
+
   let shiftX;
 
   function thumbMove({ pointerPositionX }) {
@@ -31,6 +36,8 @@ if ($rangeSlider) {
       ratio / 5
     )}px)`;
     $rangeDisplay.textContent = `${ratio}%`;
+
+    $move.textContent = `Ratio: ${ratio} AdjustedX: ${adjustedX}`;
   }
 
   function handleMouseMove(e) {
@@ -43,6 +50,8 @@ if ($rangeSlider) {
     const pointerPositionX = e.changedTouches[0].clientX;
 
     thumbMove({ pointerPositionX });
+
+    $handle.textContent = `PositionX: ${pointerPositionX}`;
   }
 
   // ポイディングデバイスがマウスだった場合の処理
@@ -74,6 +83,8 @@ if ($rangeSlider) {
         $rangeSliderTrack.getBoundingClientRect().left);
 
     $rangeDisplay.classList.add("js-active");
+
+    $touch.textContent = `shiftX: ${shiftX}`;
 
     document.addEventListener("touchmove", handleTouchMove);
 

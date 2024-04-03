@@ -251,6 +251,10 @@ header
   height: 80px;
   display: flex;
   align-items: center;
+
+  @include mq($bp-m) {
+    height: 60px;
+  }
 }
 
 .header-nav {
@@ -324,6 +328,29 @@ main-visual
 
   @include mq($bp-m) {
     aspect-ratio: 4 / 5;
+  }
+}
+
+.dev-status {
+  padding: 1em;
+  background-color: rgba($color: $color-white, $alpha: 0.5);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 25;
+  transform: translate(-50%, -50%);
+  display: none;
+
+  span + span {
+    margin-top: 16px;
+  }
+
+  span {
+    display: block;
+  }
+
+  @include mq($bp-m) {
+    display: block;
   }
 }
 
