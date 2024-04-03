@@ -73,6 +73,8 @@ if ($rangeSlider) {
       ($rangeSliderThumb.getBoundingClientRect().left -
         $rangeSliderTrack.getBoundingClientRect().left);
 
+    $rangeDisplay.classList.add("js-active");
+
     document.addEventListener("touchmove", handleTouchMove);
 
     document.addEventListener("touchend", () => {
